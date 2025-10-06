@@ -1,8 +1,6 @@
 <?php
-// Muat autoloader dari Composer
 require __DIR__ . '/vendor/autoload.php';
 
-// Muat variabel dari file .env ke dalam sistem
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -18,12 +16,9 @@ $config = [
     'latencyHost'        => $_ENV['LATENCY_CHECK_HOST'],
 ];
 
-// Buat objek monitor dengan konfigurasi
 $monitor = new DeviceMonitor($config);
 
-// Jalankan proses utama
 $monitor->collectAndSendData();
 
-// (Opsional) Beri output sederhana untuk menandakan skrip sudah berjalan
 echo "Agent finished running at " . date('Y-m-d H:i:s') . "\n";
 ?>
