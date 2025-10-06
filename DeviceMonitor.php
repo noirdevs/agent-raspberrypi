@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use GuzzleHttp\Client;
+
 class DeviceMonitor
 {
     private $config;
@@ -35,25 +37,37 @@ class DeviceMonitor
         ];
     }
 
+    /**
+     * Mengirim data payload ke server kolektor menggunakan Guzzle.
+     * @param array $payload Data yang akan dikirim.
+     * @return bool
+     */
     private function sendData(array $payload): bool
     {
-        $dataString = json_encode($payload);
-        $ch = curl_init($this->config['supabaseUrl']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'apikey: ' . $this->config['supabaseServiceKey'],
-            'Authorization: Bearer ' . $this->config['supabaseServiceKey']
-        ]);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        return $httpCode === 201;
+        $client = new Client();
+
+        try {
+            $response = $client->request('POST', $this->config['supabaseUrl'], [
+                'headers' => [
+                    'Content-Type'    => 'application/json',
+                    'apikey'          => $this->config['supabaseServiceKey'],
+                    'Authorization'   => 'Bearer ' . $this->config['supabaseServiceKey']
+                ],
+                'json' => $payload,
+                'timeout' => 15
+            ]);
+
+            return $response->getStatusCode() === 201;
+
+        } catch (\Exception $e) {
+            // Jika terjadi error koneksi atau lainnya, catat ke log (opsional)
+            // file_put_contents('agent_error.log', date('Y-m-d H:i:s') . ' - ' . $e->getMessage() . "\n", FILE_APPEND);
+            return false;
+        }
     }
 
+    // --- Method-method helper lainnya (getLatency, getUptime, dll) tetap sama ---
+    
     private function getLatency(string $host): string
     {
         $cmd = "ping -c 1 " . escapeshellarg($host) . " | tail -1 | awk '{print $4}' | cut -d '/' -f 2";

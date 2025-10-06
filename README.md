@@ -1,8 +1,8 @@
-# Pi Monitor Agent (v1 - Native cURL) 
+# Pi Monitor Agent (v2 - Guzzle) 🍓
 
 ![PHP](https://img.shields.io/badge/PHP-7.0%2B-blue.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-Agen monitoring berbasis PHP OOP yang ringan, dirancang untuk berjalan di perangkat Raspberry Pi. Skrip ini secara periodik mengumpulkan metrik sistem dan status layanan, lalu mengirimkannya ke backend terpusat untuk dianalisis.
+Agen monitoring berbasis PHP OOP yang ringan, dirancang untuk berjalan di perangkat Raspberry Pi. Skrip ini secara periodik mengumpulkan metrik sistem dan status layanan, lalu mengirimkannya ke backend terpusat (seperti Supabase) untuk dianalisis dan divisualisasikan. Versi ini menggunakan Guzzle untuk request HTTP yang lebih modern dan andal.
 
 ## ✨ Fitur
 
@@ -17,4 +17,4 @@ Agen monitoring berbasis PHP OOP yang ringan, dirancang untuk berjalan di perang
 - PHP >= 7.0
 - Ekstensi PHP: `php-curl`, `php-json`
 - **Composer**
-
+- Library : `vlucas/phpdotenv`, `guzzlehttp/guzzle`
