@@ -1,0 +1,10 @@
+{
+    "require": {
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "autoload": {
+        "classmap": [
+            "DeviceMonitor.php"
+        ]
+    }
+}
