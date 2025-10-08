@@ -1,20 +1,24 @@
-# Pi Monitor Agent (v2 - Guzzle) 🍓
+# Agent Monitoring Perangkat (Vanilla PHP)
 
-![PHP](https://img.shields.io/badge/PHP-7.0%2B-blue.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg)
+Skrip PHP ringan ini berfungsi sebagai agen untuk mengumpulkan metrik dari perangkat (seperti Raspberry Pi) dan mengirimkannya ke sebuah endpoint RESTful API.
 
-Agen monitoring berbasis PHP OOP yang ringan, dirancang untuk berjalan di perangkat Raspberry Pi. Skrip ini secara periodik mengumpulkan metrik sistem dan status layanan, lalu mengirimkannya ke backend terpusat (seperti Supabase) untuk dianalisis dan divisualisasikan. Versi ini menggunakan Guzzle untuk request HTTP yang lebih modern dan andal.
+Agen ini dirancang khusus dengan mempertimbangkan kendala lingkungan dan konektivitas, sehingga dibuat sepenuhnya menggunakan **Vanilla PHP (PHP murni)** tanpa dependensi eksternal.
 
-## ✨ Fitur
+---
 
-- **Monitoring Kesehatan Sistem:** Mengumpulkan metrik vital seperti Latency, Uptime, Ketersediaan Memori & Disk.
-- **Pengecekan Status Layanan:** Memeriksa status koneksi ke server target dan interface jaringan (PPTP/OpenVPN).
-- **Data Kontekstual:** Mengirimkan data identitas perangkat seperti Device Name, Wilayah, dan Provinsi.
-- **Struktur OOP:** Dibuat dengan prinsip Object-Oriented untuk kemudahan perawatan.
-- **Konfigurasi Terpusat:** Semua kredensial dan parameter diatur melalui file `.env` untuk keamanan.
+## Latar Belakang & Kendala Desain
 
-## ⚙️ Persyaratan
+Pilihan arsitektur "Zero Dependency" dan target PHP 7.0 diambil secara sadar karena kendala spesifik pada lingkungan target:
 
-- PHP >= 7.0
-- Ekstensi PHP: `php-curl`, `php-json`
-- **Composer**
-- Library : `vlucas/phpdotenv`, `guzzlehttp/guzzle`
+* **🎯 Target PHP 7.0:** Agen ini dirancang untuk berjalan di perangkat dengan sistem operasi lama (seperti Raspbian 9 "Stretch") yang versi PHP-nya terkunci di **7.0**. Hal ini membuat penggunaan library modern yang umumnya memerlukan PHP 7.2+ menjadi tidak memungkinkan.
+* **🌐 Kuota Internet Terbatas:** Perangkat target beroperasi di lokasi dengan koneksi internet modem yang terbatas dan mahal. Menghilangkan `composer` berarti **tidak ada lagi langkah `composer install`** yang memakan kuota data.
+* **🚀 Deployment Ringan:** Tujuannya adalah agar proses *deployment* atau *update* agen bisa dilakukan semudah mungkin, yaitu hanya dengan menyalin beberapa file skrip, tanpa perlu proses instalasi yang rumit.
+
+---
+
+## Kebutuhan Sistem
+
+* PHP versi **7.0** atau lebih tinggi
+* Ekstensi PHP: `php-curl` (untuk mengirim data ke API)
+* Akses ke *command-line tools* Linux: `ping`, `free`, `df`, `uptime`, `ip`
+
